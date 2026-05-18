@@ -1,0 +1,83 @@
+Title:
+
+Executable Self-Justifying Axiom Systems in Proflog
+
+Target:
+
+LOPSTR+PPDP 2026, Springer LNCS format. The likely paper category is a long
+research paper with a working-system component, not a pure system description:
+the contribution is both a mechanization of Willard-style self-justifying axiom
+systems and an executable declarative-programming substrate that exposes the
+computational consequences of Willard's arithmetic restrictions.
+
+Thesis:
+
+Willard-style self-justifying axiom systems can be made executable as Proflog
+programs by treating the axiom system, formula/proof coding, proof predicate,
+and generated self-consistency sentence as ordinary first-order/proof-kernel
+objects. Doing this inside Proflog tests a programming-language question that
+the metamathematical literature leaves mostly implicit: what changes when a
+language has enough arithmetic to inspect formulas and tableau proofs, but
+does not admit multiplication as a total function symbol?
+
+Core narrative:
+
+1. Proflog already supplies a proof-producing first-order/equality tableau
+   kernel with procedure calls.
+2. Willard's SJAS work supplies a family of weak arithmetic languages that can
+   consistently assert selected self-consistency principles by avoiding total
+   multiplication, and in some versions avoiding stronger total arithmetic.
+3. The implementation builds a finite `IS#_D(beta)`-style system where `D` is
+   Proflog's tableau kernel. It generates Group-Zero through Group-3 axiom
+   records, assigns object-language codes, and compiles an executable program.
+4. Formula, system, and proof codes are not hashes. They are byte/base-64
+   encodings, and a stronger U-grounding representation writes public codes as
+   binary numerals over `0`, `1`, `dbl`, and `add`.
+5. `tableau-proof/3`, `subst-code/2`, and `subst-prf/4` consume those codes
+   through the SJAS proof profile and check proof certificates through the core
+   Proflog kernel.
+6. Reflected clauses become Group-2b axioms and are citeable by the internal
+   proof predicate. External clauses remain ordinary executable Proflog code
+   and do not change the generated self-consistency claim.
+7. Tests demonstrate forward proof, answer mode, partial synthesis, arithmetic
+   graph reasoning, certificate checking, invalid-certificate rejection, and
+   generated SelfCons targets.
+
+Important claims to keep precise:
+
+- This is a finite ordinary-tableau `IS#_D(beta)` substrate.
+- It does not implement Tab-1/proof-list theorem reuse.
+- Its consistency is still a mathematical metatheorem; the implementation
+  demonstrates the executable object-language predicates and the generated
+  self-consistency axiom, not a machine-checked proof of Willard's metatheorem.
+- The current U-grounding code path avoids `project` in the promoted relation,
+  but open synthesis of large code numerals is still operationally expensive.
+- The key programming-language point is that the absence of total
+  multiplication must have teeth. The paper should state which parts already
+  route through the restricted U-grounding vocabulary and which parts remain
+  source-boundary construction.
+
+Evidence:
+
+- `worked-examples/willard-sjas.md` records the user-facing examples.
+- `test/proflog/willard_sjas_test.clj` is the focused test suite.
+- The latest recorded focused gate:
+  `lein test-proflog-sjas`
+  `Ran 35 tests containing 221 assertions.`
+  `0 failures, 0 errors.`
+- The explicit slow selector:
+  `lein test-proflog-sjas-slow`
+  `Ran 5 tests containing 22 assertions.`
+  `0 failures, 0 errors.`
+
+Likely sections:
+
+1. Introduction
+2. Background: Proflog and Willard SJAS
+3. The SJAS Profile in Proflog
+4. Arithmetized Syntax and Proof Codes
+5. Query-Triggered Evaluation and Examples
+6. Evaluation
+7. Limitations and Future Work
+8. Related Work
+9. Conclusion

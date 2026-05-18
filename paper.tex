@@ -1,0 +1,243 @@
+\documentclass[runningheads]{llncs}
+
+\usepackage[T1]{fontenc}
+\usepackage{url}
+
+\title{Executable Self-Justifying Axiom Systems in Proflog}
+\titlerunning{Executable SJAS in Proflog}
+
+\author{Author information pending}
+\authorrunning{Author information pending}
+\institute{Affiliation pending}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Willard-style self-justifying axiom systems (SJAS) identify weak arithmetic
+settings in which an axiom system can consistently state selected forms of its
+own consistency.  The core tradeoff is operationally suggestive: the object
+language keeps enough arithmetic to code syntax and proofs, while refusing the
+strength that comes with total multiplication.  We describe an implementation
+of a finite ordinary-tableau SJAS substrate inside Proflog, a tableau-based
+logic programming system.  The implementation generates a finite
+\(IS^\#_D(\beta)\)-style axiom basis, gives formulas, systems, and proof
+certificates inspectable object-language codes, and checks proof predicates
+through Proflog's first-order/equality tableau kernel.  The result is both a
+mechanization of a metamathematical construction and a small executable
+language experiment: user clauses can be reflected into the system being
+justified, or kept external as ordinary Proflog procedures, and the distinction
+changes which proofs the internal proof predicate may cite.
+\keywords{self-justifying axiom systems \and logic programming \and semantic tableaux \and proof checking \and declarative programming}
+\end{abstract}
+
+\section{Introduction}
+
+Willard's self-verifying and self-justifying axiom systems are boundary-case
+exceptions to broad forms of Godel's second incompleteness theorem.  They do
+not make strong arithmetic prove its own consistency.  Instead, they weaken the
+base language so that selected self-consistency statements can be added without
+destroying consistency~\cite{willard2001selfverifying,willard2011selfjustifying}.
+In the Type-A line most relevant to ordinary semantic tableaux, addition is
+available as total arithmetic while multiplication is represented by a
+three-place graph relation rather than by a total function symbol.
+
+This paper reports on an implementation of that idea in Proflog.  Proflog is
+Fitting's tableau-based alternative to Prolog: programs are first-order formulae
+with equality, evaluated by tableau closure plus a Procedure Call
+rule~\cite{fitting1994tableaux}.  That makes it a useful host for SJAS work.
+The same kernel that executes a Proflog program can also serve as the deduction
+method \(D\) whose proofs are coded and inspected by the object language.
+
+The contribution is not a new proof of Willard's metatheorems.  It is an
+executable account of what must be mechanized before an SJAS becomes a
+programming substrate:
+
+\begin{itemize}
+\item a finite reflected axiom basis with generated Group-Zero through Group-3
+      records;
+\item a Proflog proof profile for binary U-grounding arithmetic, formula-code
+      predicates, and proof-code predicates;
+\item inspectable formula, system, and proof encodings rather than hash labels;
+\item object-language proof predicates that validate certificates through the
+      core tableau kernel;
+\item examples distinguishing reflected user clauses, which become citeable
+      Group-2b axioms, from external clauses, which remain executable but are
+      not part of the self-consistency claim.
+\end{itemize}
+
+\section{Background}
+
+\subsection{Proflog}
+
+Fitting's Proflog replaces resolution over Horn clauses with semantic tableaux
+and procedure calls~\cite{fitting1994tableaux}.  A query succeeds
+when the tableau for its negation closes, fails when the tableau for the query
+itself closes, and remains unresolved when neither direction closes in the
+admitted search.  The implementation used here is written in Clojure's
+\texttt{core.logic}~\cite{corelogic}.  Its kernel records explicit proof terms
+for ordinary tableau steps, equality and disequality closure, and positive and
+negative procedure calls.
+
+\subsection{Willard SJAS}
+
+Willard's systems combine a weak arithmetic base with a reflected statement
+about the consistency of a deduction method.  The construction is sensitive to
+which arithmetic functions are admitted as total.  In the Type-A tableau line,
+successor and addition remain total, multiplication is not a total function,
+and multiplication facts are expressed through a relation
+\(\mathit{mult}(x,y,z)\).  Later formulations package finite systems as
+\(IS^\#_D(\beta)\), where \(\beta\) is a finite list of proper axioms and
+\(D\) is the selected deduction apparatus~\cite{willard2013significance}.
+
+\section{The Proflog SJAS Profile}
+
+The implemented profile constructs a finite \(IS^\#_D(\beta)\)-style system
+whose \(D\) is Proflog's ordinary first-order/equality tableau kernel.  The
+builder accepts a profile choice, a finite beta list, reflected Proflog
+clauses, and external Proflog clauses.  It then generates:
+
+\begin{itemize}
+\item Group-Zero and Group-1 records for the base language and U-grounding
+      prelude;
+\item Group-2 records for user beta axioms;
+\item Group-2b records for reflected user clauses;
+\item a generated Group-3 self-consistency formula;
+\item object-language \texttt{axiom-member} facts over the active finite
+      system code.
+\end{itemize}
+
+Constructing the system does not itself run proof search.  Evaluation is
+query-triggered.  A direct Proflog query calls the compiled program's
+Procedure Call Rule.  An SJAS theorem query proves from the generated axiom
+basis.  This distinction is central to the authoring model.  A reflected
+clause such as
+
+\begin{verbatim}
+demo(x) :- x = 1.
+\end{verbatim}
+
+becomes both executable code and a Group-2b axiom citeable by the internal
+proof predicate.  An external clause remains ordinary executable Proflog code
+but does not change the system code or generated Group-3 formula.
+
+\section{Arithmetized Syntax and Proof Codes}
+
+The first implementation used finite labels for formulas and proof targets.
+That was useful as a bootstrap, but it did not constitute arithmetized syntax.
+The current profile instead assigns formulas, systems, and proof certificates
+byte/base-64 codes.  In the compact representation these appear as first-order
+terms of the shape
+
+\begin{verbatim}
+(code-N b0 ... bN-1)
+\end{verbatim}
+
+where each byte is a small SJAS binary numeral.  A stronger U-grounding code
+format writes public codes as ordinary binary numerals over \(0\), \(1\),
+\texttt{dbl}, and \texttt{add}.  The latter makes the code representation live
+inside the base language, rather than in generated \texttt{code-N}
+constructors.
+
+The promoted predicates consume these codes.  \texttt{wff} and formula-class
+predicates decode formula bytes structurally.  \texttt{neg-pair} relates a
+formula code to the code of its negation.  \texttt{subst-code} performs the
+fixed-point substitution used by the Level-1 Group-3 sentence.  The predicate
+\texttt{tableau-proof/3} decodes the supplied proof code and invokes the
+Proflog kernel with the decoded proof term supplied as the certificate to be
+checked.  Thus proof validity is not decided by a host-side lookup table.
+
+\section{Examples}
+
+The worked examples exercise three relevant modes.
+
+\paragraph{Reflected and external programs.}
+With a reflected \texttt{demo} clause, both ordinary Proflog evaluation and
+SJAS theorem evaluation can prove \texttt{demo(1)}.  Adding an external
+application clause lets the compiled program prove its ground call, but leaves
+the system code and Group-3 code unchanged.  This shows that ``writing a
+program in the SJAS'' means adding a finite reflected extension before Group-3
+generation, not merely calling an SJAS-flavored library from outside.
+
+\paragraph{Beta axiom versus executable procedure.}
+The system can place
+
+\begin{verbatim}
+forall x. mult(2, 2, x) -> composite(x)
+\end{verbatim}
+
+in beta.  Then \texttt{composite(4)} is an SJAS theorem, but there is no
+runtime \texttt{composite/1} procedure.  Alternatively, a reflected procedure
+
+\begin{verbatim}
+composite(x) :- mult(2, 2, x).
+\end{verbatim}
+
+is executable through the Procedure Call Rule and is also represented as a
+Group-2b axiom.  The executable version supports answer mode: querying
+\texttt{composite(x)} returns the binary numeral for \(4\).
+
+\paragraph{Certificate checking.}
+For a generated beta axiom, the profile can validate a proof certificate for
+that theorem code.  The same certificate is rejected for an unrelated theorem
+code.  A formal \texttt{sjas-axiom} certificate succeeds only when
+\texttt{axiom-member(system,theorem)} is true for the active system.  An
+inconsistent control system containing \texttt{false} validates a contradiction
+certificate, demonstrating that the contradiction code is a substantive proof
+target rather than a placeholder.
+
+\section{Evaluation}
+
+The focused SJAS regression suite currently records:
+
+\begin{verbatim}
+lein test-proflog-sjas
+Ran 35 tests containing 221 assertions.
+0 failures, 0 errors.
+\end{verbatim}
+
+The explicit slow selector records:
+
+\begin{verbatim}
+lein test-proflog-sjas-slow
+Ran 5 tests containing 22 assertions.
+0 failures, 0 errors.
+\end{verbatim}
+
+The tests cover language shape, formula classes, reflected and external
+authoring boundaries, U-grounding arithmetic, forward proof, answer mode,
+partial synthesis, structural formula decoding, proof-code decoding, the core
+SJAS proof predicates, and the generated Level-1 fixed-point path.
+
+\section{Limitations}
+
+The current implementation is a finite ordinary-tableau
+\(IS^\#_D(\beta)\) substrate.  It does not implement Tab-1 or proof-list
+theorem reuse.  Open proof-code synthesis is also operationally expensive.
+The consistency of the generated system remains a mathematical metatheorem in
+Willard's sense; the implementation demonstrates executable object-language
+reflection predicates and generated self-consistency axioms, not a
+machine-checked proof of the metatheorem.
+
+The programming-language question remains sharper than the current prototype:
+the absence of total multiplication must have observable consequences.  The
+implementation already removes \texttt{mul/2} from the SJAS language and routes
+proof predicates through inspectable U-grounding codes.  Future work should push
+more syntax construction and proof-code manipulation fully into the
+object-language arithmetic so that the cost and limitations of replacing total
+multiplication by \texttt{mult/3} are directly experienced by programs.
+
+\section{Conclusion}
+
+Proflog provides a natural executable setting for Willard-style
+self-justifying axiom systems because its programs are already proof-search
+objects.  The SJAS profile turns that observation into a concrete system:
+finite reflected axiom bases, generated self-consistency formulas,
+arithmetized formula and proof codes, and certificate checking through the
+ordinary tableau kernel.  This makes SJAS not only a metamathematical
+construction but also a declarative-programming experiment.
+
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}
