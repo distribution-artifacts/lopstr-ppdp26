@@ -3,7 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{url}
 
-\title{Executable Self-Justifying Axiom Systems in Proflog}
+\title{Executable Self-Justifying Axiom Systems in Proflog:\\A System Description}
 \titlerunning{Executable SJAS in Proflog}
 
 \author{Author information pending}
@@ -18,10 +18,11 @@ Willard-style self-justifying axiom systems (SJAS) identify weak arithmetic
 settings in which an axiom system can consistently state selected forms of its
 own consistency.  The core tradeoff is operationally suggestive: the object
 language keeps enough arithmetic to code syntax and proofs, while refusing the
-strength that comes with total multiplication.  We describe an implementation
-of a finite ordinary-tableau SJAS substrate inside Proflog, a tableau-based
-logic programming system.  The implementation generates a finite
-\(IS^\#_D(\beta)\)-style axiom basis, gives formulas, systems, and proof
+strength that comes with total multiplication.  This system description reports
+on an implementation of a finite ordinary-tableau SJAS substrate inside
+Proflog, a tableau-based logic programming system.  The implementation
+generates a finite
+\(IS\#_D(\beta)\)-style axiom basis, gives formulas, systems, and proof
 certificates inspectable object-language codes, and checks proof predicates
 through Proflog's first-order/equality tableau kernel.  The result is both a
 mechanization of a metamathematical construction and a small executable
@@ -66,6 +67,25 @@ programming substrate:
       not part of the self-consistency claim.
 \end{itemize}
 
+\section{System Availability and Scope}
+
+The working system is available as part of Proflog at
+\url{https://github.com/autarkenterprises/proflog}.  The implementation
+described here corresponds to the main-line SJAS work through commit
+\texttt{028d912}; the focused user-facing examples are in
+\texttt{worked-examples/willard-sjas.md}, and the regression suite is
+\texttt{test/proflog/willard\_sjas\_test.clj}.  The dedicated commands are:
+
+\begin{verbatim}
+lein test-proflog-sjas
+lein test-proflog-sjas-slow
+\end{verbatim}
+
+This is a system description of a working profile, not a claim that every
+Willard variant has been implemented.  The implemented deduction method \(D\)
+is Proflog's ordinary semantic-tableau kernel.  The profile deliberately does
+not yet include Tab-1 theorem reuse or proof-list checking.
+
 \section{Background}
 
 \subsection{Proflog}
@@ -87,12 +107,12 @@ which arithmetic functions are admitted as total.  In the Type-A tableau line,
 successor and addition remain total, multiplication is not a total function,
 and multiplication facts are expressed through a relation
 \(\mathit{mult}(x,y,z)\).  Later formulations package finite systems as
-\(IS^\#_D(\beta)\), where \(\beta\) is a finite list of proper axioms and
+\(IS\#_D(\beta)\), where \(\beta\) is a finite list of proper axioms and
 \(D\) is the selected deduction apparatus~\cite{willard2013significance}.
 
 \section{The Proflog SJAS Profile}
 
-The implemented profile constructs a finite \(IS^\#_D(\beta)\)-style system
+The implemented profile constructs a finite \(IS\#_D(\beta)\)-style system
 whose \(D\) is Proflog's ordinary first-order/equality tableau kernel.  The
 builder accepts a profile choice, a finite beta list, reflected Proflog
 clauses, and external Proflog clauses.  It then generates:
@@ -146,6 +166,13 @@ fixed-point substitution used by the Level-1 Group-3 sentence.  The predicate
 \texttt{tableau-proof/3} decodes the supplied proof code and invokes the
 Proflog kernel with the decoded proof term supplied as the certificate to be
 checked.  Thus proof validity is not decided by a host-side lookup table.
+
+The source boundary still constructs finite code terms from Proflog formulas
+before a query begins.  After construction, however, the checked predicates
+receive object-language codes and route them through SJAS decoding and proof
+checking.  In the U-grounding profile, public formula, system, and proof codes
+are numerals in the SJAS arithmetic vocabulary, and relation-backed decoding
+records the fixed-radix multiplication step used to recover byte strings.
 
 \section{Examples}
 
@@ -209,10 +236,19 @@ authoring boundaries, U-grounding arithmetic, forward proof, answer mode,
 partial synthesis, structural formula decoding, proof-code decoding, the core
 SJAS proof predicates, and the generated Level-1 fixed-point path.
 
+Several tests are intentionally semantic rather than merely structural.  For
+example, \texttt{tableau-proof/3} accepts a real encoded certificate for a beta
+axiom and rejects the same certificate when paired with an unrelated theorem
+code.  \texttt{subst-code/2} computes the Level-1 fixed-point substitution and
+rejects the system code as the wrong substitution source.  The U-grounding
+tests assert that generated systems expose no \texttt{code-N} constructors in
+their language signatures and that bound-code decoding cites the byte-cons and
+radix-shift proof steps.
+
 \section{Limitations}
 
 The current implementation is a finite ordinary-tableau
-\(IS^\#_D(\beta)\) substrate.  It does not implement Tab-1 or proof-list
+\(IS\#_D(\beta)\) substrate.  It does not implement Tab-1 or proof-list
 theorem reuse.  Open proof-code synthesis is also operationally expensive.
 The consistency of the generated system remains a mathematical metatheorem in
 Willard's sense; the implementation demonstrates executable object-language
@@ -226,6 +262,12 @@ proof predicates through inspectable U-grounding codes.  Future work should push
 more syntax construction and proof-code manipulation fully into the
 object-language arithmetic so that the cost and limitations of replacing total
 multiplication by \texttt{mult/3} are directly experienced by programs.
+
+The U-grounding proof predicates also have a pragmatic ground-entry path for
+already-ground public code numerals.  That path destructures the code term one
+byte at a time to avoid stack overflow in the miniKanren host, then delegates
+to the same structural byte and formula/proof decoders.  It does not synthesize
+open codes and is not an additional SJAS theorem rule.
 
 \section{Conclusion}
 

@@ -1,14 +1,16 @@
 Title:
 
-Executable Self-Justifying Axiom Systems in Proflog
+Executable Self-Justifying Axiom Systems in Proflog: A System Description
 
 Target:
 
-LOPSTR+PPDP 2026, Springer LNCS format. The likely paper category is a long
-research paper with a working-system component, not a pure system description:
-the contribution is both a mechanization of Willard-style self-justifying axiom
-systems and an executable declarative-programming substrate that exposes the
-computational consequences of Willard's arithmetic restrictions.
+LOPSTR+PPDP 2026, Springer LNCS format. The paper category is a system
+description: the submission must describe novel aspects of the working Proflog
+SJAS profile and provide the system link
+<https://github.com/autarkenterprises/proflog>. The contribution is both a
+mechanization of Willard-style self-justifying axiom systems and an executable
+declarative-programming substrate that exposes the computational consequences
+of Willard's arithmetic restrictions.
 
 Thesis:
 
@@ -73,11 +75,12 @@ Evidence:
 Likely sections:
 
 1. Introduction
-2. Background: Proflog and Willard SJAS
-3. The SJAS Profile in Proflog
-4. Arithmetized Syntax and Proof Codes
-5. Query-Triggered Evaluation and Examples
-6. Evaluation
-7. Limitations and Future Work
-8. Related Work
-9. Conclusion
+2. System Availability and Scope
+3. Background: Proflog and Willard SJAS
+4. The SJAS Profile in Proflog
+5. Arithmetized Syntax and Proof Codes
+6. Query-Triggered Evaluation and Examples
+7. Evaluation
+8. Limitations and Future Work
+9. Related Work
+10. Conclusion
