@@ -18,3 +18,6 @@ the primary submission artifacts.
   the 10-page system-description limit excluding bibliography. `slides.pdf` is
   13 pages. The remaining LaTeX diagnostic is a low-severity underfull hbox in
   the bibliography URL.
+- Replaced the paper and deck author placeholders with the repository git
+  identity, `James Torre <jpt4@proton.me>`, so the artifacts no longer contain
+  submission-facing author metadata placeholders.
