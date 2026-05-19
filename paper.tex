@@ -35,7 +35,7 @@ changes which proofs the internal proof predicate may cite.
 \section{Introduction}
 
 Willard's self-verifying and self-justifying axiom systems are boundary-case
-exceptions to broad forms of Godel's second incompleteness theorem.  They do
+exceptions to broad forms of G\"odel's second incompleteness theorem.  They do
 not make strong arithmetic prove its own consistency.  Instead, they weaken the
 base language so that selected self-consistency statements can be added without
 destroying consistency~\cite{willard2001selfverifying,willard2011selfjustifying}.
@@ -72,7 +72,7 @@ programming substrate:
 The working system is available as part of Proflog at
 \url{https://github.com/autarkenterprises/proflog}.  The implementation
 described here corresponds to the main-line SJAS work through commit
-\texttt{028d912}; the focused user-facing examples are in
+\texttt{14d3150}; the focused user-facing examples are in
 \texttt{worked-examples/willard-sjas.md}, and the regression suite is
 \texttt{test/proflog/willard\_sjas\_test.clj}.  The dedicated commands are:
 
@@ -215,7 +215,8 @@ target rather than a placeholder.
 
 \section{Evaluation}
 
-The focused SJAS regression suite currently records:
+The focused SJAS regression suite was rerun on 18 May 2026 against commit
+\texttt{14d3150}.  It records:
 
 \begin{verbatim}
 lein test-proflog-sjas
@@ -268,6 +269,26 @@ already-ground public code numerals.  That path destructures the code term one
 byte at a time to avoid stack overflow in the miniKanren host, then delegates
 to the same structural byte and formula/proof decoders.  It does not synthesize
 open codes and is not an additional SJAS theorem rule.
+
+\section{Related Work}
+
+The mathematical source for this implementation is Willard's work on
+self-verifying and self-justifying axiom systems, especially the ordinary
+tableau line in which total multiplication is replaced by a multiplication
+graph relation~\cite{willard2001selfverifying,willard2004addition,willard2011selfjustifying,willard2013significance}.
+Those papers establish the consistency phenomenon and the shape of finite
+\(IS\#_D(\beta)\)-style systems.  Proflog contributes a different perspective:
+it asks what it takes for such a system to become an executable programming
+substrate with visible authoring and proof-checking boundaries.
+
+The implementation is also closely related to Fitting's original Proflog
+proposal~\cite{fitting1994tableaux}.  Fitting used semantic tableaux as a
+logic-programming operational semantics, while the present system reuses the
+same kind of proof-search machinery as the deduction method whose certificates
+are coded and checked.  Clojure's \texttt{core.logic} provides the relational
+implementation substrate~\cite{corelogic}; it is not the object theory being
+justified, but it supplies the host relations, answer mode, and search control
+needed to expose the SJAS profile as executable Proflog code.
 
 \section{Conclusion}
 

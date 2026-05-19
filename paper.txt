@@ -2,6 +2,14 @@ Title:
 
 Executable Self-Justifying Axiom Systems in Proflog: A System Description
 
+Corresponding deck:
+
+The Beamer deck in `slides.tex` should support a 15-minute system-description
+talk. The talk arc mirrors the paper: core claim, Willard arithmetic boundary,
+why Proflog is the host, implemented `IS#_D(beta)` profile, reflected versus
+external authoring, inspectable formula/proof codes, proof-predicate path,
+examples, evaluation, explicit limitations, and final takeaway.
+
 Target:
 
 LOPSTR+PPDP 2026, Springer LNCS format. The paper category is a system

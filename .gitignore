@@ -7,10 +7,15 @@
 *.log
 *.out
 *.pdf
+!paper.pdf
+!slides.pdf
 *.ps
 *.run.xml
 *.synctex.gz
 *.toc
+*.nav
+*.snm
+*.vrb
 .#*
 \#*\#
 *~

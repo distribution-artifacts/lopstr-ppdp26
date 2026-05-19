@@ -7,11 +7,13 @@ Drafting workflow:
 
 - Raw notes and author drafting go in `paper.txt`.
 - The submission source is `paper.tex`.
+- The corresponding presentation deck source is `slides.tex`.
 - References go in `references.bib`.
-- Build with `make`. The local TeX installation has `llncs.cls` and
-  `splncs04.bst`.
+- Build both artifacts with `make`, or use `make paper` and `make slides`
+  separately. The local TeX installation has `llncs.cls` and `splncs04.bst`.
 
-Target facts from the LOPSTR+PPDP 2026 CFP, checked 2026-05-18:
+Target facts from the LOPSTR+PPDP 2026 CFP, checked 2026-05-19 at
+<https://icfp26.sigplan.org/home/lopstr-ppdp-2026>:
 
 - Venue: joint LOPSTR+PPDP symposium, co-located with ICFP 2026.
 - Proceedings: Springer Nature Lecture Notes in Computer Science.
@@ -38,3 +40,11 @@ finite Willard-style `IS#_D(beta)` substrate with U-grounding arithmetic,
 object-language formula/proof codes, and kernel-checked proof predicates, while
 Tab-1/proof-list theorem reuse and open proof-code synthesis remain future
 work.
+
+Current deck direction:
+
+The deck is a 15-minute conference-talk design that mirrors the paper:
+motivation, Proflog/SJAS alignment, generated system profile, reflected versus
+external authoring, inspectable codes, proof-predicate path, examples,
+evaluation, limitations, and takeaway. It uses Beamer so the deck is editable
+and rebuildable from the same repository as the paper.
