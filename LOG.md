@@ -21,3 +21,29 @@ the primary submission artifacts.
 - Replaced the paper and deck author placeholders with the repository git
   identity, `James Torre <jpt4@proton.me>`, so the artifacts no longer contain
   submission-facing author metadata placeholders.
+
+## 2026-05-28
+
+- Reframed the repository as the publication-grade artifact described by
+  `abstract.txt`: copied the relevant Proflog implementation, tests, worked
+  examples, and Leiningen build file into this repository while leaving
+  development-only upstream documentation out.
+- Removed the slide deck from version control without deleting the local
+  `slides.tex` and `slides.pdf` files. The Makefile now builds only
+  `paper.pdf`, and the ignored local slide files can be re-added after
+  acceptance.
+- Rewrote `paper.tex` as a system-description submission centered on the
+  Proflog architecture, worked Fitting examples with proof traces, the
+  `IS#_D(beta)` SJAS builder, inspectable codes, and proof-predicate
+  internalization boundaries.
+- Updated `README.md` with the artifact contents, paper-only build workflow,
+  focused verification commands, and the SJAS testing practice needed to avoid
+  opaque long-running full-suite retries.
+- Verification: `make paper` completed successfully and produced a 7-page
+  `paper.pdf`. `lein test-proflog-fast` passed 158 tests / 592 assertions.
+  `lein test-proflog-extended` passed 68 tests / 203 assertions. The two
+  selected SJAS checks in `README.md` passed 1 test / 13 assertions and 1 test
+  / 8 assertions respectively. Direct `proflog.fitting-programs` runs produced
+  the P1/P2 proof traces printed in the paper; the full
+  `lein test-proflog-fitting-programs` suite exceeded the practical focused
+  window and was stopped before completion.

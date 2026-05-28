@@ -1,0 +1,57 @@
+20260521Z
+
+An Executable Self-Justifying Axiom System in Proflog
+
+Willard's Self-Justifying Axiom Systems (SJAS) are a family of weak arithmetic theories able to consistently assert a particular definition of their own consistency. Their construction is delicate, relying on an interaction between any given system's underlying linguistic expressivity, and the "efficiency" of their respective proof procedure. To investigate these systems, and the connection between their logical and computational properties, we implement the IS#_D(beta) SJAS variant in Proflog, a logic programming language based on the tableau proof procedure, first proposed by Fitting.
+
+Repo structure:
+All of the relevant code from autarkenterprises/proflog is to be copied to this directory, so that the link to the system description can be to this publication grade repo, rather than the experimental and in-flux proflog development repo. Only the relevant code should be copied: src/proflog, test/proflog, and the worked examples, but none of the legacy code, nor the development documentation (ADRs, Lessons, AGENTS.md, etc.). All documentation necessary for a new reader of the repo to use, test, and verify the claims of the system description paper should be included, however.
+
+Paper style: System Description - emphasis is on the actual implementation, primarily of SJAS, with a robust review of Proflog. Architecture and worked examples are paramount, with actual code.
+
+Paper Outline:
+
+Research objective:
+ - Self-justification is a property of logical systems with certain characteristics - is it possible to define a corresponding programming language? What does "correspondence" require and entail?
+
+What is SJAS
+ - SJAS as described by Willard, as a tool for investigating the conditions under which Goedel's Second Incompleteness Theorem hold.
+ - The exact point at which self-justification arises, when the combination of tableau deduction and U-Grounding arithmetic prevent the proof tree of a pathological sentence from closing.
+
+What is Proflog
+ - Overview of Fitting's specification of Proflog
+ - Tableau deduction over First-order logic with equality + procedure rule
+
+Why Proflog
+ - The most linguistically expressive variant of SJAS uses the tableau proof procedure as its deductive apparatus.
+ - Self-justification is sensitive to the particular details of how sentences in the language, and their proofs, are generated and encoded. To be confident a programming language captures the same essential characteristics, it must be little more than an "executable tableau prover". Proflog offers the nearest example of this in the literature.
+
+How Proflog is implemented
+ - Architecture of the implementation: kernel, ast builder, frontend syntax
+ - Worked examples go here, in particular Fitting's even/odd and Nim programs, showing their evaluation from what the user sees at the repl, to what the kernel sees and how it evaluates them.
+
+Implementation of IS#_D(beta)-in-Proflog
+ - Worked examples, worked examples, worked examples - what additional infrastrucuture does this SJAS variant need?
+ - Encoding, internalization, and the proof predicate.
+
+Future work:
+ - Performance optimizations
+ - Further computationalizations of self-justification. E.g. (speculative): Unprovable tableau proof -> unclosable branch <> Undecidable Kolmogorov complexity -> infinitely looping program
+
+AI Disclosure Statement:
+
+Project material created in part using the following AI/ML tools:
+
+Codex GPT-5.4, 5.5 (OpenAI)
+
+Claude Opus 4.6, 4.7 (Anthropic)
+
+Research supported by:
+
+FUTO Fellowship, Summer 2025 - https://futo.tech/
+
+Bloominglabs, Inc - https://bloominglabs.org
+
+Seth Frey, Dept. of Communication, UC Davis - https://communication.ucdavis.edu/people/seth-frey
+
+References:

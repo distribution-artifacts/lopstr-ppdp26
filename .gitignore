@@ -8,7 +8,8 @@
 *.out
 *.pdf
 !paper.pdf
-!slides.pdf
+slides.pdf
+slides.tex
 *.ps
 *.run.xml
 *.synctex.gz
