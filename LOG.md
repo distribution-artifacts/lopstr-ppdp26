@@ -39,11 +39,12 @@ the primary submission artifacts.
 - Updated `README.md` with the artifact contents, paper-only build workflow,
   focused verification commands, and the SJAS testing practice needed to avoid
   opaque long-running full-suite retries.
-- Verification: `make paper` completed successfully and produced a 7-page
-  `paper.pdf`. `lein test-proflog-fast` passed 158 tests / 592 assertions.
-  `lein test-proflog-extended` passed 68 tests / 203 assertions. The two
-  selected SJAS checks in `README.md` passed 1 test / 13 assertions and 1 test
-  / 8 assertions respectively. Direct `proflog.fitting-programs` runs produced
-  the P1/P2 proof traces printed in the paper; the full
-  `lein test-proflog-fitting-programs` suite exceeded the practical focused
-  window and was stopped before completion.
+- Verification: `make paper` completed successfully and produced an 8-page
+  `paper.pdf`. After syncing the parent fitting-gate repair, the artifact
+  `lein test-proflog-fast` passed 159 tests / 594 assertions in `146.92 s`,
+  `lein test-proflog-extended` passed 68 tests / 203 assertions in `267.79 s`,
+  and `lein test-proflog-fitting-programs` passed 6 tests / 81 assertions in
+  `71.02 s`, matching the parent repository's current green result shape. The
+  two selected SJAS checks in `README.md` passed 1 test / 13 assertions and 1
+  test / 8 assertions respectively. Direct `proflog.fitting-programs` runs
+  produced the P1/P2 proof traces printed in the paper.

@@ -46,6 +46,7 @@ Current local result:
 ```text
 Ran 6 tests containing 81 assertions.
 0 failures, 0 errors.
+elapsed_s=71.02
 ```
 
 This suite is intentionally separate from `test-proflog-extended`. It includes

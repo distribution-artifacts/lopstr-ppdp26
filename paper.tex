@@ -325,10 +325,17 @@ the system examples:
 make paper
 lein test-proflog-fast
 lein test-proflog-extended
+lein test-proflog-fitting-programs
 lein run -m proflog.fitting-programs p1-odd-1-succeeds p2-win-4-succeeds p2-win-3-fails factored-win-1-unresolved
 lein test :only proflog.willard-sjas-test/sjas-system-builder-generates-groups-and-reflected-boundary
 lein test :only proflog.willard-sjas-test/sjas-u-grounding-tableau-proof-checks-numeral-system-theorem-and-proof-codes
 \end{lstlisting}
+
+In the artifact repository, the focused fast suite passed 159 tests / 594
+assertions in 146.92 seconds, the extended suite passed 68 tests / 203
+assertions in 267.79 seconds, and the Fitting catalog gate passed 6 tests / 81
+assertions in 71.02 seconds after syncing with the parent repository's current
+result surface.  The corresponding parent Fitting run passed in 72.23 seconds.
 
 The SJAS namespace and the full Fitting catalog are intentionally expensive.
 The artifact therefore provides progress-visible SJAS aliases and direct
