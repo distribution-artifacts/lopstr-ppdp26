@@ -4,6 +4,17 @@ This log records process notes for the LOPSTR+PPDP 2026 Proflog SJAS paper
 repository. The paper source, deck source, references, and generated PDFs are
 the primary submission artifacts.
 
+## 2026-06-01
+
+- Added a submission-facing in-principle arithmeticization subsection to
+  `paper.tex`. The paper now states the semantic target
+  `TabPrf_beta(s,t,p)`: decode the finite SJAS system, theorem formula, and
+  proof tree, then check a closed semantic tableau for
+  `AxiomConj(s) /\ not(Formula(t))` through bounded code-reading, syntax,
+  axiom-membership, tableau-step, branch-closure, substitution, and
+  reflected-clause relations. This records the paper's claim independently of
+  whether evaluating the full relation is practical for large public numerals.
+
 ## 2026-05-19
 
 - Updated the system-description paper to match the current verified Proflog

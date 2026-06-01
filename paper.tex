@@ -316,6 +316,42 @@ large public code numerals remains an operational boundary, so the focused
 suite tests ground and partially bound decoding paths rather than claiming
 unbounded code generation is cheap.
 
+\subsection{In-Principle Arithmeticization}
+
+The intended semantic object is not the fact that the host Proflog evaluator can
+prove a formula.  It is the arithmetical relation
+\(\mathsf{TabPrf}_\beta(s,t,p)\): the system code \(s\) decodes to a finite
+\(IS\#_D(\beta)\) axiom basis \(\Gamma_s\), the theorem code \(t\) decodes to a
+formula \(T\), and the proof code \(p\) decodes to a finite closed semantic
+tableau for \(\Gamma_s \wedge \neg T\).  For the consistency sentence, \(t\)
+is the contradiction code, so the Group-3 assertion says that no such \(p\)
+exists for the system's own code.
+
+This relation decomposes into bounded code readers, syntax checks, system-code
+reconstruction, axiom-membership checking, proof-tree navigation, local tableau
+rule checking, branch closure, substitution checking, and reflected-clause
+expansion.  Each component is a relation over byte strings or U-grounding
+numerals, expressible with the profile's arithmetic vocabulary.  Multiplication
+need not be installed as a total function; fixed-radix decoding and other
+arithmetic operations are used as graph relations on the concrete numerals that
+appear in the codes.
+
+Soundness is then the ordinary tableau soundness induction, but applied to the
+decoded tree: every internal node is accepted only by a semantic-tableau rule
+or by a reflected procedure-call macro equivalent to expanding a decoded finite
+first-order clause from \(s\), and every leaf is accepted only by a branch
+contradiction or by an arithmeticized profile relation.  Conversely, any finite
+closed tableau using the admitted rules can be serialized as a proof code whose
+local node evidence is accepted by the relation.  This is the in-principle
+internalization required for the SJAS claim, even when evaluating the full
+relation is impractical for large public numerals.
+
+The proof-code layout is therefore required to be natural and inspectable, not
+byte-for-byte identical to one historical presentation.  It must preserve the
+tree and Willard's lower-bound size discipline for semantic tableaux; theorem
+equivalence alone would be too weak, because a host prover could accept the
+same formulas with shorter or differently shaped proof objects.
+
 \section{Evaluation and Reproducibility}
 
 The repository includes the commands needed to rebuild the paper and verify
